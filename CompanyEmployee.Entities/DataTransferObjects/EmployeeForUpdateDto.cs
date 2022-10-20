@@ -2,8 +2,8 @@
 
 namespace CompanyEmployee.Entities.DataTransferObjects
 {
-    public class EmployeeForCreationDto : EmployeeForManipulatingDto
+    public class EmployeeForUpdateDto : EmployeeForManipulatingDto
     {
-        
+      
     }
 }

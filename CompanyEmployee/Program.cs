@@ -1,8 +1,10 @@
+using CompanyEmployee.ActionFilters;
 using CompanyEmployee.Contracts;
 using CompanyEmployee.Entities.Context;
 using CompanyEmployee.Extensions;
 using CompanyEmployee.LoggerService;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 
@@ -15,15 +17,22 @@ builder.Services.AddControllers(config =>
     config.RespectBrowserAcceptHeader = true;
     config.ReturnHttpNotAcceptable = true;
 
-}).AddXmlDataContractSerializerFormatters().AddCustomCSVFormatter();
+}).AddNewtonsoftJson()
+  .AddXmlDataContractSerializerFormatters()
+  .AddCustomCSVFormatter();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
+
+builder.Services.AddScoped<ValidateEmployeeForCompanyExistsAttribute>();
+builder.Services.AddScoped<ValidateCompanyExistsAttribute>();
 builder.Services.AddScoped<ILoggerManager, LoggerManager>();
+builder.Services.AddScoped<ValidationFilterAttribute>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.ConfigureRepositoryManager();
@@ -31,6 +40,10 @@ builder.Services.ConfigureRepositoryManager();
 builder.Services.AddDbContext<RepositoryContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("CEDb")));
 
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 var app = builder.Build();
 
