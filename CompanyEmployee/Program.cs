@@ -5,6 +5,7 @@ using CompanyEmployee.Entities.Context;
 using CompanyEmployee.Entities.DataTransferObjects;
 using CompanyEmployee.Extensions;
 using CompanyEmployee.LoggerService;
+using CompanyEmployee.Repositories.Extensions;
 using CompanyEmployees.ActionFilters;
 using CompanyEmployees.Utility;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -34,9 +35,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCustomMediaTypes();
 builder.Services.AddMemoryCache();
-builder.Services.ConfigureRateLimitingOptions();
+builder.Services.AddAuthentication();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.ConfigureRateLimitingOptions();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureHttpCacheHeaders();
 builder.Services.ConfigureResponseCaching();
 builder.Services.ConfigureVersioning();
@@ -45,6 +49,7 @@ builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureRepositoryManager();
 
+builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 builder.Services.AddScoped<EmployeeLinks>();
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
 builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
@@ -93,13 +98,14 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
 
 app.UseIpRateLimiting();
 
 app.UseResponseCaching();
 
 app.UseHttpCacheHeaders();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

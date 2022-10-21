@@ -6,6 +6,7 @@ using CompanyEmployee.Entities.Models;
 using CompanyEmployee.ModelBinders;
 using CompanyEmployee.Repositories;
 using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyEmployee.Controllers
@@ -25,7 +26,7 @@ namespace CompanyEmployee.Controllers
             _logger = logger;
             _mapper = mapper;
         }
-        [HttpGet(Name = "GetCompanies")]
+        [HttpGet(Name = "GetCompanies"), Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetCompanies()
         {
             var companies = await _repository.Company.GetAllCompaniesAsync(trackChanges: false);

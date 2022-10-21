@@ -22,6 +22,8 @@ namespace CompanyEmployee.Entities.Mapper
 
             CreateMap<CompanyForUpdateDto, Company>();
 
+            CreateMap<UserForRegistrationDto, User>();
+
         }
     }
 }
