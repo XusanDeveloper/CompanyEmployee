@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using CompanyEmployee.ActionFilters;
 using CompanyEmployee.Contracts;
 using CompanyEmployee.Entities.Context;
@@ -32,6 +33,9 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCustomMediaTypes();
+builder.Services.AddMemoryCache();
+builder.Services.ConfigureRateLimitingOptions();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.ConfigureHttpCacheHeaders();
 builder.Services.ConfigureResponseCaching();
@@ -90,6 +94,8 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseIpRateLimiting();
 
 app.UseResponseCaching();
 
