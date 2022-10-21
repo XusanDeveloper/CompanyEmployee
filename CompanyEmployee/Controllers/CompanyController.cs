@@ -5,12 +5,14 @@ using CompanyEmployee.Entities.DataTransferObjects;
 using CompanyEmployee.Entities.Models;
 using CompanyEmployee.ModelBinders;
 using CompanyEmployee.Repositories;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyEmployee.Controllers
 {
     [Route("api/companies")]
     [ApiController]
+    [ResponseCache(CacheProfileName = "120SecondsDuration")]
     public class CompanyController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
@@ -34,6 +36,8 @@ namespace CompanyEmployee.Controllers
         }
 
         [HttpGet("{id}", Name = "CompanyById")]
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 60)]
+        [HttpCacheValidation(MustRevalidate = false)]
         public async Task<IActionResult> GetCompany(Guid id)
         {
             var company = await _repository.Company.GetCompanyAsync(id, trackChanges: false);

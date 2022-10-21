@@ -20,18 +20,26 @@ builder.Services.AddControllers(config =>
 {
     config.RespectBrowserAcceptHeader = true;
     config.ReturnHttpNotAcceptable = true;
-
+    config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
+    {
+        Duration = 120
+    });
 }).AddNewtonsoftJson()
   .AddXmlDataContractSerializerFormatters()
   .AddCustomCSVFormatter();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCustomMediaTypes();
 
+builder.Services.ConfigureHttpCacheHeaders();
+builder.Services.ConfigureResponseCaching();
+builder.Services.ConfigureVersioning();
 builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
+builder.Services.ConfigureRepositoryManager();
 
 builder.Services.AddScoped<EmployeeLinks>();
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
@@ -41,8 +49,6 @@ builder.Services.AddScoped<ValidateCompanyExistsAttribute>();
 builder.Services.AddScoped<ILoggerManager, LoggerManager>();
 builder.Services.AddScoped<ValidationFilterAttribute>();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.ConfigureRepositoryManager();
 
 builder.Services.AddDbContext<RepositoryContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("CEDb")));
@@ -84,6 +90,11 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseResponseCaching();
+
+app.UseHttpCacheHeaders();
+
 app.UseAuthorization();
 
 app.MapControllers();
