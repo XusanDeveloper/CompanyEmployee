@@ -4,11 +4,13 @@ using CompanyEmployee.Entities.Context;
 using CompanyEmployee.Entities.DataTransferObjects;
 using CompanyEmployee.Extensions;
 using CompanyEmployee.LoggerService;
-using CompanyEmployee.Repositories.Data_Shaping;
+using CompanyEmployees.ActionFilters;
+using CompanyEmployees.Utility;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog;
+using Repository.DataShaping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,12 +27,14 @@ builder.Services.AddControllers(config =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddCustomMediaTypes();
 
 builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 
+builder.Services.AddScoped<EmployeeLinks>();
+builder.Services.AddScoped<ValidateMediaTypeAttribute>();
 builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
 builder.Services.AddScoped<ValidateEmployeeForCompanyExistsAttribute>();
 builder.Services.AddScoped<ValidateCompanyExistsAttribute>();
