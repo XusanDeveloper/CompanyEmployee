@@ -3,7 +3,7 @@ using CompanyEmployee.Entities.Context;
 using CompanyEmployee.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CompanyEmployee.Repositories
+namespace CompanyEmployee.Repositories.Repositories
 {
     public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
     {

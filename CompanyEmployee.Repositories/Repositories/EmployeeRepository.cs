@@ -2,9 +2,10 @@
 using CompanyEmployee.Entities.Context;
 using CompanyEmployee.Entities.Models;
 using CompanyEmployee.Entities.RequestFeatures;
+using CompanyEmployee.Repositories.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace CompanyEmployee.Repositories
+namespace CompanyEmployee.Repositories.Repositories
 {
     public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
     {
@@ -17,9 +18,9 @@ namespace CompanyEmployee.Repositories
         public async Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges)
         {
             var employees = await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
+                .FilterEmployees(employeeParameters.MinAge, employeeParameters.MaxAge)
+                .Search(employeeParameters.SearchTerm)
                 .OrderBy(e => e.Name)
-                .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
-                .Take(employeeParameters.PageSize)
                 .ToListAsync();
 
             var count = await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges).CountAsync();

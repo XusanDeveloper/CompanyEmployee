@@ -1,7 +1,7 @@
 ﻿using CompanyEmployee.Contracts;
 using CompanyEmployee.Entities.Context;
 
-namespace CompanyEmployee.Repositories
+namespace CompanyEmployee.Repositories.Repositories
 {
     public class RepositoryManager : IRepositoryManager
     {

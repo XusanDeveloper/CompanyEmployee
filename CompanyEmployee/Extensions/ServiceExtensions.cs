@@ -1,6 +1,7 @@
 ﻿using CompanyEmployee.Contracts;
 using CompanyEmployee.LoggerService;
 using CompanyEmployee.Repositories;
+using CompanyEmployee.Repositories.Repositories;
 
 namespace CompanyEmployee.Extensions
 {
