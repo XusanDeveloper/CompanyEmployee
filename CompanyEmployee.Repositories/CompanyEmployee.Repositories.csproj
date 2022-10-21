@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.20" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CompanyEmployee.Contracts\CompanyEmployee.Contracts.csproj" />
     <ProjectReference Include="..\CompanyEmployee.Entities\CompanyEmployee.Entities.csproj" />
   </ItemGroup>
