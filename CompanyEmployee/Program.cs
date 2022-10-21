@@ -1,8 +1,10 @@
 using CompanyEmployee.ActionFilters;
 using CompanyEmployee.Contracts;
 using CompanyEmployee.Entities.Context;
+using CompanyEmployee.Entities.DataTransferObjects;
 using CompanyEmployee.Extensions;
 using CompanyEmployee.LoggerService;
+using CompanyEmployee.Repositories.Data_Shaping;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +31,7 @@ builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 
+builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
 builder.Services.AddScoped<ValidateEmployeeForCompanyExistsAttribute>();
 builder.Services.AddScoped<ValidateCompanyExistsAttribute>();
 builder.Services.AddScoped<ILoggerManager, LoggerManager>();
